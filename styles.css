@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+#game-container {
+    display: flex;
+    height: 100vh;
+    text-align: center;
+    justify-content: center;
+    padding-top: 10%;
+}
+#game-board {
+    height: 600px;
+    width: 600px;
+    background-color: lightblue;
+}
