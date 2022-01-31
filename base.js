@@ -1,2 +1,6 @@
 //variables and array storage
-let currentScore = 78;
+let currentScore = 0;
+
+let snakeBody = [];
+
+export { currentScore, snakeBody }

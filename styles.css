@@ -36,11 +36,6 @@ body {
     padding: 0;
 }
 #food {
-    
     background-color: orange;
-    
-    grid-column: 30 / 31;
-    grid-row: 20 / 21;
-
     padding: 0;
 } 
