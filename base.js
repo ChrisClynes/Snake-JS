@@ -79,6 +79,26 @@ window.addEventListener('keydown', e => {
         }
     }
     }); 
+
+document.getElementById("menu").addEventListener('click', toggleMenu);
+
+function toggleMenu() {
+    const menu = document.getElementById("menu-container");
+    const container = document.getElementById("controls");
+    const reset = document.getElementById("reset-btn");
+    if(menu.style.display == "none" || menu.style.display == "") {// second condition needed to not have to click button twice
+        menu.style.display = "flex";
+        container.style.flexDirection = "column";
+        container.style.height = "70px"; 
+        reset.style.display = "none";
+    }else {
+        menu.style.display = "none";
+        container.style.height = "35px";
+        reset.style.display = "flex"; 
+        container.style.flexDirection = "initial";
+    }
+    
+}
     
     function checkForEvent() {
         if (foodX === snakeBody[0].x & foodY === snakeBody[0].y){
@@ -93,6 +113,5 @@ window.addEventListener('keydown', e => {
             randomFood();
         }
     }
-
 
 export { currentScore, highScore, gameSpeedMs, snakeBody, foodX, foodY, numberOfSegments, direction, drawSnake, randomFood, checkForEvent};
