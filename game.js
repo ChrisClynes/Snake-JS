@@ -14,16 +14,10 @@ function randomSnakeStart() {
     }
 window.onload = randomSnakeStart(), randomFood();
 
-
-function gameLoop() {// loops on set interval based on gameSpeedMs
-    setInterval(()=> {
-        renderFrame();
-    }, gameSpeedMs); 
-}
+export const gameLoop = setInterval(renderFrame, gameSpeedMs);
 
 function renderFrame() {
     checkForEvent();
     drawSnake();
 }
 
-gameLoop();

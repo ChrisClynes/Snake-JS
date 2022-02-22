@@ -1,4 +1,4 @@
-//variables and array storage
+import { gameLoop } from './game.js'; 
 
 let currentScore = 0;
 let highScore = 0;
@@ -101,6 +101,12 @@ function toggleMenu() {
 }
     
     function checkForEvent() {
+        for(let i = 2; i < snakeBody.length; i++) {
+            if (snakeBody[0].x === snakeBody[i].x & snakeBody[0].y === snakeBody[i].y){
+                stopGameLoop("You lose");
+            }
+        }
+        
         if (foodX === snakeBody[0].x & foodY === snakeBody[0].y){
             document.getElementById('score').innerText =`SCORE: ${currentScore += 100}`;
                 if(highScore <= currentScore){
@@ -114,4 +120,21 @@ function toggleMenu() {
         }
     }
 
-export { currentScore, highScore, gameSpeedMs, snakeBody, foodX, foodY, numberOfSegments, direction, drawSnake, randomFood, checkForEvent};
+function stopGameLoop(alertMsg) {
+    clearInterval(gameLoop);
+    alert(alertMsg);
+    resetState();
+}
+
+function resetState(){
+    currentScore = 0;
+    gameSpeedMs = 200;
+    snakeBody = [];
+    direction = {x: 0, y: 0};
+    foodX = null;
+    foodY = null;
+    numberOfSegments = 0;
+}
+
+
+export { currentScore, highScore, gameSpeedMs, snakeBody, foodX, foodY, numberOfSegments, direction, drawSnake, randomFood, checkForEvent };
