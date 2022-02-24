@@ -1,4 +1,4 @@
-import { gameLoop } from './game.js'; 
+import { randomSnakeStart, gameLoop, renderFrame } from './game.js'; 
 
 let currentScore = 0;
 let highScore = 0;
@@ -12,6 +12,7 @@ let numberOfSegments = 0;
 
 function drawSnake() {
     const snakeHead = document.getElementById("snake-head");
+    console.log(direction)
         snakeBody[0].x += direction.x;
         snakeBody[0].y += direction.y;
         snakeHead.style.gridColumnStart = snakeBody[0].x;
@@ -97,22 +98,35 @@ function toggleMenu() {
         reset.style.display = "flex"; 
         container.style.flexDirection = "initial";
     }
-    
 }
     
     function checkForEvent() {
+        switch(true) {
+            case (snakeBody[0].x >= 20):
+            return stopGameLoop(`You lose, your score is: ${currentScore}`);
+            break;
+            case (snakeBody[0].y >= 20):
+            return stopGameLoop(`You lose, your score is: ${currentScore}`);
+            break;
+            case (snakeBody[0].x < 1):
+            return stopGameLoop(`You lose, your score is: ${currentScore}`);
+            break;
+            case (snakeBody[0].y < 1):
+            return stopGameLoop(`You lose, your score is: ${currentScore}`);
+            break;
+        }
         for(let i = 2; i < snakeBody.length; i++) {
-            if (snakeBody[0].x === snakeBody[i].x & snakeBody[0].y === snakeBody[i].y){
-                stopGameLoop("You lose");
+            if (snakeBody[0].x == snakeBody[i].x & snakeBody[0].y == snakeBody[i].y){
+                stopGameLoop(`You lose, your score is: ${currentScore}`);
             }
         }
-        
         if (foodX === snakeBody[0].x & foodY === snakeBody[0].y){
             document.getElementById('score').innerText =`SCORE: ${currentScore += 100}`;
-                if(highScore <= currentScore){
-                    document.getElementById('high-score').innerText =`HIGH SCORE: ${currentScore}`;
+                if(currentScore >= highScore){
+                    highScore = currentScore;
+                    document.getElementById('high-score').innerText =`HIGH SCORE: ${highScore}`;
                 }
-                if (gameSpeedMs >= 60){
+                if (gameSpeedMs >= 50){
                     gameSpeedMs -= 2;
                 }
             addSegment();
@@ -120,10 +134,22 @@ function toggleMenu() {
         }
     }
 
+function resetDiv(){
+    for (let i = 1; i <= numberOfSegments; i++) {
+        document.getElementById("snake" + i).remove();
+    }
+}
+
 function stopGameLoop(alertMsg) {
     clearInterval(gameLoop);
     alert(alertMsg);
+    resetDiv();
     resetState();
+    document.getElementById('score').innerText =`SCORE: ${currentScore}`;
+    randomSnakeStart();
+    randomFood();
+    gameLoop = setInterval(renderFrame, gameSpeedMs);
+    console.log(currentScore)
 }
 
 function resetState(){

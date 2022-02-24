@@ -4,9 +4,9 @@ import { currentScore, highScore, gameSpeedMs, snakeBody, randomFood, drawSnake,
 document.getElementById('score').innerText =`SCORE: ${currentScore}`;
 document.getElementById('high-score').innerText =`HIGH SCORE: ${highScore}`;
 
-function randomSnakeStart() {
-    let xVal = Math.floor((Math.random()* 20) + 1);
-    let yVal= Math.floor((Math.random()* 20) + 1);
+export function randomSnakeStart() {
+    let xVal = Math.floor((Math.random()* 18) + 2);
+    let yVal= Math.floor((Math.random()* 18) + 2);
     let snake = document.getElementById("snake-head");
         snake.style.gridColumnStart = xVal;
         snake.style.gridRowStart = yVal;
@@ -14,9 +14,9 @@ function randomSnakeStart() {
     }
 window.onload = randomSnakeStart(), randomFood();
 
-export const gameLoop = setInterval(renderFrame, gameSpeedMs);
+export let gameLoop = setInterval(renderFrame, gameSpeedMs);
 
-function renderFrame() {
+export function renderFrame() {
     checkForEvent();
     drawSnake();
 }
