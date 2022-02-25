@@ -2,19 +2,20 @@ import { randomSnakeStart, gameLoop, renderFrame } from './game.js';
 
 let currentScore = 0;
 let highScore = 0;
-let gameSpeedMs = 200;
+let gameSpeedMs = 100;
 let snakeBody = [];
 let direction = {x: 0, y: 0};
 let foodX = null;
 let foodY = null;
 let numberOfSegments = 0;
+let directionFlag = 0;
 
 
 function drawSnake() {
     const snakeHead = document.getElementById("snake-head");
-    console.log(direction)
         snakeBody[0].x += direction.x;
         snakeBody[0].y += direction.y;
+        directionFlag = 0;
         snakeHead.style.gridColumnStart = snakeBody[0].x;
         snakeHead.style.gridRowStart = snakeBody[0].y;
             if(numberOfSegments > 0){
@@ -60,23 +61,27 @@ function randomFood() {
 //controls
 window.addEventListener('keydown', e => {
     if(e.key === 'ArrowUp' || e.key === 'w'){
-        if(direction.y !== 1){//checks not equal to down
+        if(direction.y !== 1 & directionFlag == 0){//checks not equal to down
             direction = {x: 0, y: -1};//move snake up direction 
+            directionFlag = 1; //prevents against multiple moves between frames
         }
     }
     if(e.key === 'ArrowDown' || e.key === 's'){
-        if(direction.y !== -1){//checks not equal to up
-            direction = {x: 0, y: 1};//move snake down direction 
+        if(direction.y !== -1 & directionFlag == 0){//checks not equal to up
+            direction = {x: 0, y: 1};//move snake down direction
+            directionFlag = 1; //prevents against multiple moves between frames
         }
     }
     if(e.key === 'ArrowRight' || e.key === 'd'){
-        if(direction.x !== -1){//checks not equal to left
+        if(direction.x !== -1 & directionFlag == 0){//checks not equal to left
             direction = {x: 1, y: 0};//move snake right direction 
+            directionFlag = 1; //prevents against multiple moves between frames
         }
     }    
     if(e.key === 'ArrowLeft' || e.key === 'a'){
-        if(direction.x !== 1){//checks not equal to right
-            direction = {x: -1, y: 0};//move snake left direction 
+        if(direction.x !== 1 & directionFlag == 0){//checks not equal to right
+            direction = {x: -1, y: 0};//move snake left direction
+            directionFlag = 1; //prevents against multiple moves between frames
         }
     }
     }); 
