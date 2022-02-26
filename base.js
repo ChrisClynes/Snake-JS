@@ -1,23 +1,28 @@
 import { randomSnakeStart, gameLoop, renderFrame } from './game.js'; 
 
+//-----------Variables, could have made this an object------------
+
 let currentScore = 0;
 let highScore = 0;
-let gameSpeedMs = 100;
+let gameSpeedMs = 200;
 let snakeBody = [];
 let direction = {x: 0, y: 0};
 let foodX = null;
 let foodY = null;
 let numberOfSegments = 0;
 let directionFlag = 0;
+let difficulty = "medium";
+let difficultySpeed = 0; 
 
+//---------------------------Game functions---------------------------
 
 function drawSnake() {
-    const snakeHead = document.getElementById("snake-head");
-        snakeBody[0].x += direction.x;
+    const S = document.getElementById("snake-head");
+        snakeBody[0].x += direction.x;//set new snake head coordinates
         snakeBody[0].y += direction.y;
-        directionFlag = 0;
-        snakeHead.style.gridColumnStart = snakeBody[0].x;
-        snakeHead.style.gridRowStart = snakeBody[0].y;
+        directionFlag = 0;//reset flag to allow new input direction
+     S.style.gridColumnStart = snakeBody[0].x;
+     S.style.gridRowStart = snakeBody[0].y;
             if(numberOfSegments > 0){
                 for(let i = 1; i < snakeBody.length ; i++){
                     document.getElementById(`snake${i}`).style.gridColumnStart = snakeBody[i].x
@@ -58,7 +63,43 @@ function randomFood() {
             }
 }
 
-//controls
+function checkForEvent() {
+    switch(true) {
+        case (snakeBody[0].x > 20):
+        return stopGameLoop(`You lose, your score is: ${currentScore}`);//check if right wall collision
+        break;
+        case (snakeBody[0].y > 20):
+        return stopGameLoop(`You lose, your score is: ${currentScore}`);//check if bottom wall collision
+        break;
+        case (snakeBody[0].x < 1):
+        return stopGameLoop(`You lose, your score is: ${currentScore}`);//check if left wall collision
+        break;
+        case (snakeBody[0].y < 1):
+        return stopGameLoop(`You lose, your score is: ${currentScore}`);//check if top wall collision
+        break;
+    }
+    for(let i = 2; i < snakeBody.length; i++) {
+        if (snakeBody[0].x == snakeBody[i].x & snakeBody[0].y == snakeBody[i].y){
+            stopGameLoop(`You lose, your score is: ${currentScore}`);//check if snake collision with self
+        }
+    }
+    if (foodX === snakeBody[0].x & foodY === snakeBody[0].y){
+        document.getElementById('score').innerText =`SCORE: ${currentScore += 100}`;
+            if(currentScore >= highScore){
+                highScore = currentScore;//set high score if current score is higher than previous high score
+                document.getElementById('high-score').innerText =`HIGH SCORE: ${highScore}`;
+            }
+            if (gameSpeedMs >= 100){
+                gameSpeedMs -= difficultySpeed;// adjusted by difficulty, increase game speed after each segment is added.
+            }
+        addSegment();
+        randomFood();
+    }
+}
+
+
+//-----------------Controls-----------------------------------------------
+
 window.addEventListener('keydown', e => {
     if(e.key === 'ArrowUp' || e.key === 'w'){
         if(direction.y !== 1 & directionFlag == 0){//checks not equal to down
@@ -86,8 +127,12 @@ window.addEventListener('keydown', e => {
     }
     }); 
 
+//--------------------------DOM Manipulation-----------------------------
+
+
 document.getElementById("menu").addEventListener('click', toggleMenu);
 
+//this fuction expands a menu with additional options
 function toggleMenu() {
     const menu = document.getElementById("menu-container");
     const container = document.getElementById("controls");
@@ -105,66 +150,36 @@ function toggleMenu() {
     }
 }
     
-    function checkForEvent() {
-        switch(true) {
-            case (snakeBody[0].x >= 20):
-            return stopGameLoop(`You lose, your score is: ${currentScore}`);
-            break;
-            case (snakeBody[0].y >= 20):
-            return stopGameLoop(`You lose, your score is: ${currentScore}`);
-            break;
-            case (snakeBody[0].x < 1):
-            return stopGameLoop(`You lose, your score is: ${currentScore}`);
-            break;
-            case (snakeBody[0].y < 1):
-            return stopGameLoop(`You lose, your score is: ${currentScore}`);
-            break;
-        }
-        for(let i = 2; i < snakeBody.length; i++) {
-            if (snakeBody[0].x == snakeBody[i].x & snakeBody[0].y == snakeBody[i].y){
-                stopGameLoop(`You lose, your score is: ${currentScore}`);
-            }
-        }
-        if (foodX === snakeBody[0].x & foodY === snakeBody[0].y){
-            document.getElementById('score').innerText =`SCORE: ${currentScore += 100}`;
-                if(currentScore >= highScore){
-                    highScore = currentScore;
-                    document.getElementById('high-score').innerText =`HIGH SCORE: ${highScore}`;
-                }
-                if (gameSpeedMs >= 50){
-                    gameSpeedMs -= 2;
-                }
-            addSegment();
-            randomFood();
-        }
-    }
 
 function resetDiv(){
     for (let i = 1; i <= numberOfSegments; i++) {
-        document.getElementById("snake" + i).remove();
+        document.getElementById("snake" + i).remove();//remove all snake body segements from previous game
     }
 }
 
+//----------------------End Game and Reset-------------------------------------
+
 function stopGameLoop(alertMsg) {
-    clearInterval(gameLoop);
+    clearInterval(gameLoop); // stop game loop
     alert(alertMsg);
     resetDiv();
     resetState();
     document.getElementById('score').innerText =`SCORE: ${currentScore}`;
     randomSnakeStart();
     randomFood();
-    gameLoop = setInterval(renderFrame, gameSpeedMs);
+    gameLoop = setInterval(renderFrame, gameSpeedMs); //resatart game loop
     console.log(currentScore)
 }
 
 function resetState(){
-    currentScore = 0;
+    currentScore = 0;//reset current score but keep high score
     gameSpeedMs = 200;
     snakeBody = [];
     direction = {x: 0, y: 0};
     foodX = null;
     foodY = null;
     numberOfSegments = 0;
+    difficulty = "medium";
 }
 
 
