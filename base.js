@@ -1,10 +1,10 @@
-import { randomSnakeStart, gameLoop, renderFrame } from './game.js'; 
+import { randomSnakeStart } from './game.js'; 
 
 //-----------Variables, could have made this an object------------
 
 let currentScore = 0;
 let highScore = 0;
-let gameSpeedMs = 200;
+let gameSpeedMs = 150;
 let snakeBody = [];
 let direction = {x: 0, y: 0};
 let foodX = null;
@@ -66,21 +66,21 @@ function randomFood() {
 function checkForEvent() {
     switch(true) {
         case (snakeBody[0].x > 20):
-        return stopGameLoop(`You lose, your score is: ${currentScore}`);//check if right wall collision
+        return stopGame(`You lose! Your score is: ${currentScore}`);//check if right wall collision
         break;
         case (snakeBody[0].y > 20):
-        return stopGameLoop(`You lose, your score is: ${currentScore}`);//check if bottom wall collision
+        return stopGame(`You lose! Your score is: ${currentScore}`);//check if bottom wall collision
         break;
         case (snakeBody[0].x < 1):
-        return stopGameLoop(`You lose, your score is: ${currentScore}`);//check if left wall collision
+        return stopGame(`You lose! Your score is: ${currentScore}`);//check if left wall collision
         break;
         case (snakeBody[0].y < 1):
-        return stopGameLoop(`You lose, your score is: ${currentScore}`);//check if top wall collision
+        return stopGame(`You lose! Your score is: ${currentScore}`);//check if top wall collision
         break;
     }
     for(let i = 2; i < snakeBody.length; i++) {
         if (snakeBody[0].x == snakeBody[i].x & snakeBody[0].y == snakeBody[i].y){
-            stopGameLoop(`You lose, your score is: ${currentScore}`);//check if snake collision with self
+            stopGame(`You lose! Your score is: ${currentScore}`);//check if snake collision with self
         }
     }
     if (foodX === snakeBody[0].x & foodY === snakeBody[0].y){
@@ -101,25 +101,25 @@ function checkForEvent() {
 //-----------------Controls-----------------------------------------------
 
 window.addEventListener('keydown', e => {
-    if(e.key === 'ArrowUp' || e.key === 'w'){
+    if(e.key === 'ArrowUp'){
         if(direction.y !== 1 & directionFlag == 0){//checks not equal to down
             direction = {x: 0, y: -1};//move snake up direction 
             directionFlag = 1; //prevents against multiple moves between frames
         }
     }
-    if(e.key === 'ArrowDown' || e.key === 's'){
+    if(e.key === 'ArrowDown'){
         if(direction.y !== -1 & directionFlag == 0){//checks not equal to up
             direction = {x: 0, y: 1};//move snake down direction
             directionFlag = 1; //prevents against multiple moves between frames
         }
     }
-    if(e.key === 'ArrowRight' || e.key === 'd'){
+    if(e.key === 'ArrowRight'){
         if(direction.x !== -1 & directionFlag == 0){//checks not equal to left
             direction = {x: 1, y: 0};//move snake right direction 
             directionFlag = 1; //prevents against multiple moves between frames
         }
     }    
-    if(e.key === 'ArrowLeft' || e.key === 'a'){
+    if(e.key === 'ArrowLeft'){
         if(direction.x !== 1 & directionFlag == 0){//checks not equal to right
             direction = {x: -1, y: 0};//move snake left direction
             directionFlag = 1; //prevents against multiple moves between frames
@@ -127,6 +127,7 @@ window.addEventListener('keydown', e => {
     }
     }); 
 
+    
 //--------------------------DOM Manipulation-----------------------------
 
 
@@ -159,27 +160,23 @@ function resetDiv(){
 
 //----------------------End Game and Reset-------------------------------------
 
-function stopGameLoop(alertMsg) {
-    clearInterval(gameLoop); // stop game loop
+function stopGame(alertMsg) {
     alert(alertMsg);
     resetDiv();
     resetState();
     document.getElementById('score').innerText =`SCORE: ${currentScore}`;
     randomSnakeStart();
     randomFood();
-    gameLoop = setInterval(renderFrame, gameSpeedMs); //resatart game loop
-    console.log(currentScore)
 }
 
 function resetState(){
     currentScore = 0;//reset current score but keep high score
-    gameSpeedMs = 200;
+    gameSpeedMs = 150;
     snakeBody = [];
     direction = {x: 0, y: 0};
     foodX = null;
     foodY = null;
     numberOfSegments = 0;
-    difficulty = "medium";
 }
 
 

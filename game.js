@@ -14,10 +14,18 @@ export function randomSnakeStart() {
     }
 window.onload = randomSnakeStart(), randomFood();
 
-export let gameLoop = setInterval(renderFrame, gameSpeedMs);
+let previousRenderTime = 0;
 
+export function startGameLoop(currentTime) {
+    window.requestAnimationFrame(startGameLoop);
+    const timeBetweenRender = currentTime - previousRenderTime;
+    if (timeBetweenRender < gameSpeedMs ) return;
+    previousRenderTime = currentTime;
+    renderFrame();
+}
 export function renderFrame() {
     checkForEvent();
-    drawSnake();
+    drawSnake();  
 }
 
+window.requestAnimationFrame(startGameLoop);
