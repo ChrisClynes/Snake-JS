@@ -11,7 +11,6 @@ let foodX = null;
 let foodY = null;
 let numberOfSegments = 0;
 let directionFlag = 0;
-let difficulty = "medium";
 let difficultySpeed = 0; 
 
 //---------------------------Game functions---------------------------
@@ -29,7 +28,7 @@ function drawSnake() {
                     document.getElementById(`snake${i}`).style.gridRowStart = snakeBody[i].y
                 } 
                 for( let i = snakeBody.length - 2; i >= 0; i--){
-                    snakeBody[i + 1] = {...snakeBody[i]};
+                    snakeBody[i + 1] = {...snakeBody[i]};//shifts segments to new locations to be drawn on next render
                 }
             }
 }
@@ -64,6 +63,7 @@ function randomFood() {
 }
 
 function checkForEvent() {
+    let difficulty = document.getElementById('difficulty').value;
     switch(true) {
         case (snakeBody[0].x > 20):
         return stopGame(`You lose! Your score is: ${currentScore}`);//check if right wall collision
@@ -89,13 +89,17 @@ function checkForEvent() {
                 highScore = currentScore;//set high score if current score is higher than previous high score
                 document.getElementById('high-score').innerText =`HIGH SCORE: ${highScore}`;
             }
-            if (gameSpeedMs >= 100){
-                gameSpeedMs -= difficultySpeed;// adjusted by difficulty, increase game speed after each segment is added.
+            if (difficulty == "hard" && gameSpeedMs > 60){
+                    gameSpeedMs -= 5;// adjusted by difficulty, increase game speed after each segment is added.
+                }        
+            if (difficulty == "medium" && gameSpeedMs > 100){
+                    gameSpeedMs -= 2;// adjusted by difficulty, increase game speed after each segment is added.
+                }
+                console.log(gameSpeedMs)
+                addSegment();
+                randomFood();
             }
-        addSegment();
-        randomFood();
     }
-}
 
 
 //-----------------Controls-----------------------------------------------
@@ -130,8 +134,8 @@ window.addEventListener('keydown', e => {
     
 //--------------------------DOM Manipulation-----------------------------
 
-
 document.getElementById("menu").addEventListener('click', toggleMenu);
+document.getElementById("reset-btn").addEventListener('click', resetBtn);
 
 //this fuction expands a menu with additional options
 function toggleMenu() {
@@ -151,7 +155,6 @@ function toggleMenu() {
     }
 }
     
-
 function resetDiv(){
     for (let i = 1; i <= numberOfSegments; i++) {
         document.getElementById("snake" + i).remove();//remove all snake body segements from previous game
@@ -166,7 +169,7 @@ function stopGame(alertMsg) {
     resetState();
     document.getElementById('score').innerText =`SCORE: ${currentScore}`;
     randomSnakeStart();
-    randomFood();
+    randomFood();//all functions run to reset game's state
 }
 
 function resetState(){
@@ -179,5 +182,12 @@ function resetState(){
     numberOfSegments = 0;
 }
 
+function resetBtn() {
+    resetDiv();
+    resetState();
+    document.getElementById('score').innerText =`SCORE: ${currentScore}`;
+    randomSnakeStart();
+    randomFood();//this resetBtn function is triggered when the reset btn is clicked, resets game state, except the high score
+}
 
 export { currentScore, highScore, gameSpeedMs, snakeBody, foodX, foodY, numberOfSegments, direction, drawSnake, randomFood, checkForEvent };
