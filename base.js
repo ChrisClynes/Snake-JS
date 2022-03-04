@@ -1,6 +1,6 @@
 import { randomSnakeStart } from './game.js'; 
 
-//-----------Variables, could have made this an object------------
+//-----------Variables------------
 
 let currentScore = 0;
 let highScore = 0;
@@ -60,27 +60,29 @@ function randomFood() {
                 foodX = xVal;
                 foodY = yVal;
             }
+        food.style.backgroundColor="rgba(252, 164, 0, 0.822)";
+        food.style.boxShadow="0px 0px 2px 2px rgba(245, 108, 29, 0.575) inset";
 }
 
 function checkForEvent() {
     let difficulty = document.getElementById('difficulty').value;
     switch(true) {
         case (snakeBody[0].x > 20):
-        return stopGame(`You lose! Your score is: ${currentScore}`);//check if right wall collision
+        return stopGame(`Your score is: ${currentScore}`);//check if right wall collision
         break;
         case (snakeBody[0].y > 20):
-        return stopGame(`You lose! Your score is: ${currentScore}`);//check if bottom wall collision
+        return stopGame(`Your score is: ${currentScore}`);//check if bottom wall collision
         break;
         case (snakeBody[0].x < 1):
-        return stopGame(`You lose! Your score is: ${currentScore}`);//check if left wall collision
+        return stopGame(`Your score is: ${currentScore}`);//check if left wall collision
         break;
         case (snakeBody[0].y < 1):
-        return stopGame(`You lose! Your score is: ${currentScore}`);//check if top wall collision
+        return stopGame(`Your score is: ${currentScore}`);//check if top wall collision
         break;
     }
     for(let i = 2; i < snakeBody.length; i++) {
         if (snakeBody[0].x == snakeBody[i].x & snakeBody[0].y == snakeBody[i].y){
-            stopGame(`You lose! Your score is: ${currentScore}`);//check if snake collision with self
+            stopGame(`Your score is: ${currentScore}`);//check if snake collision with self
         }
     }
     if (foodX === snakeBody[0].x & foodY === snakeBody[0].y){
@@ -130,17 +132,48 @@ window.addEventListener('keydown', e => {
         }
     }
     }); 
+//-----------------------Mobile Controls-----------------------------------
+
+document.getElementById("up-btn").addEventListener('click', moblieDirectionUp);
+document.getElementById("down-btn").addEventListener('click', moblieDirectionDown);
+document.getElementById("left-btn").addEventListener('click', moblieDirectionLeft);
+document.getElementById("right-btn").addEventListener('click', moblieDirectionRight);
+
+function moblieDirectionUp() {
+        if(direction.y !== 1 & directionFlag == 0){//checks not equal to down
+            direction = {x: 0, y: -1};//move snake up direction 
+            directionFlag = 1; //prevents against multiple moves between frames
+        }
+}
+function moblieDirectionDown() {
+    if(direction.y !== -1 & directionFlag == 0){//checks not equal to up
+        direction = {x: 0, y: 1};//move snake down direction
+        directionFlag = 1; //prevents against multiple moves between frames
+    }
+}
+function moblieDirectionLeft() {
+    if(direction.x !== 1 & directionFlag == 0){//checks not equal to right
+        direction = {x: -1, y: 0};//move snake left direction
+        directionFlag = 1; //prevents against multiple moves between frames
+    }
+}
+function moblieDirectionRight() {
+    if(direction.x !== -1 & directionFlag == 0){//checks not equal to left
+        direction = {x: 1, y: 0};//move snake right direction 
+        directionFlag = 1; //prevents against multiple moves between frames
+    }
+}
 
     
 //--------------------------DOM Manipulation-----------------------------
 
-document.getElementById("menu").addEventListener('click', toggleMenu);
+document.getElementById("menu-btn").addEventListener('click', toggleMenu);
 document.getElementById("reset-btn").addEventListener('click', resetBtn);
 
 //this fuction expands a menu with additional options
 function toggleMenu() {
     const menu = document.getElementById("menu-container");
-    const container = document.getElementById("controls");
+    const container = document.getElementById("options");
     const reset = document.getElementById("reset-btn");
     if(menu.style.display == "none" || menu.style.display == "") {// second condition needed to not have to click button twice
         menu.style.display = "flex";

@@ -11,6 +11,8 @@ export function randomSnakeStart() {
         snake.style.gridColumnStart = xVal;
         snake.style.gridRowStart = yVal;
         snakeBody.push({x: xVal, y: yVal});
+        snake.style.backgroundColor="rgba(231, 53, 53, 0.925)";
+        snake.style.boxShadow="0px 0px 2px 2px rgba(223, 11, 11, 0.925) inset"; 
     }
 window.onload = randomSnakeStart(), randomFood();
 

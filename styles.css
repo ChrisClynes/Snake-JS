@@ -5,6 +5,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    everflow: hidden;
 }
 .scoreboard {
     width: 408px;
@@ -41,11 +43,9 @@ body {
     width: 400px;
     background-color: rgba(33, 33, 33, 0.719);
 }
-#snake-head {
-    background-color: rgba(231, 53, 53, 0.925);  
+#snake-head {  
     padding: 0;
     z-index: 9;/*--makes sure snakeHead is on top of food or other items--*/
-    box-shadow: 0px 0px 2px 2px rgba(223, 11, 11, 0.925) inset; 
 }
 .snake {
     background-color: rgba(177, 25, 25, 0.945);  
@@ -53,9 +53,7 @@ body {
     border: 1px solid black;
 }
 #food {
-    background-color: rgba(252, 164, 0, 0.822);
     padding: 0;
-    box-shadow: 0px 0px 2px 2px rgba(245, 108, 29, 0.575) inset;
 } 
 #menu-container {
     display: none;
@@ -64,7 +62,18 @@ body {
     padding: 10px;
     width: 100%;
 }
-#controls {
+.menu-btns {
+    background-color: rgba(167, 164, 164, 0.849);
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid rgb(34, 34, 34);
+}
+.menu-btns:active {
+    box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.61) inset;
+}
+#options {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -77,14 +86,66 @@ body {
 #difficulty-text {
     font-family: 'Nunito', sans-serif;
     padding-right: 5px;
+    color:aliceblue;
+}
+/*-------------------mobile controls--------------------*/
+
+.mobile-controls {
+    display: none;
+    padding-top: 20px;
+    width: 260px;
+    height: 200px;
+    position: relative;
+}
+.arrow-btns {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(199, 199, 198, 0.664);
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 0px 0px 6px 6px rgba(0, 0, 0, 0.61) inset;
+}
+.arrow-btns:active {
+    background-color: rgba(114, 114, 111, 0.74);
+    box-shadow: 0px 0px 8px 8px rgba(0, 0, 0, 0.61) inset;
+}
+#up-btn {
+    position: absolute;
+    top: 20px;
+    left: 130px;
+    transform: translateX(-50%)
+}
+#down-btn {
+    position: absolute;
+    top: 120px;
+    left: 130px;
+    transform: translateX(-50%)
+}
+#left-btn {
+    position: absolute;
+    top: 70px;
+    left: 50px;
+}
+#right-btn {
+    position: absolute;
+    top: 70px;
+    left: 156px;
+}
+.fa-caret-down, .fa-caret-up, .fa-caret-left, .fa-caret-right {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /*----------------- mobile reponsiveness ---------------*/
 
 @media screen and (max-width: 600px) {
-    .scoreboard, #menu-container, #controls {
+    .scoreboard, #menu-container{
       width: 300px;
       height: 72px;
+    }
+    #options {
+        width: 300px;
     }
     #game-board {
         width: 292px;
@@ -92,6 +153,13 @@ body {
     }
     .scoreboard {
         font-size: 12px;
+        font-weight: 200;
+    }
+    .mobile-controls{
+        display: flex;
+    }
+    .menu-btns {
+        padding: 2px;
     }
    
   }
